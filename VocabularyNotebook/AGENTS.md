@@ -127,7 +127,7 @@ Since this is a documentation-based project, there are no traditional build/lint
 4. Include context-specific examples when user mentions usage scenario
 5. Suggest related words or word families when beneficial
 6. **Generate audio pronunciation**: Always use TTS skill to create audio file for new words
-7. **Add audio icon**: Include 🔊 emoji after phonetic transcription for clickable audio playback
+7. **Add audio controls**: Include HTML5 audio element after phonetic transcription: `<audio controls><source src="audio/[word].mp3" type="audio/mpeg">🔊</audio>`
 
 ### When Searching/Reviewing
 1. Use case-insensitive search
