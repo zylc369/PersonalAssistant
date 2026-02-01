@@ -181,6 +181,35 @@ class TTSCLI:
             logger.warning(f"Could not list remote models: {e}")
 
 
+def generate_filename_from_text(text: str, max_length: int = 20) -> str:
+    """Generate a filename from text by taking first words and limiting length.
+    
+    Args:
+        text: Input text to convert to filename
+        max_length: Maximum filename length (excluding .wav extension)
+        
+    Returns:
+        Generated filename string
+    """
+    import re
+    
+    # Remove non-alphanumeric characters except spaces and common punctuation
+    cleaned_text = re.sub(r'[^\w\s\-\'"]', '', text)
+    
+    # Take first few words and limit length
+    words = cleaned_text.split()[:5]  # Max 5 words
+    base_name = '_'.join(words)
+    
+    # Truncate if too long
+    if len(base_name) > max_length:
+        base_name = base_name[:max_length]
+    
+    # Remove trailing underscores and make lowercase
+    base_name = base_name.rstrip('_').lower()
+    
+    return f"{base_name}.wav"
+
+
 def setup_arg_parser() -> argparse.ArgumentParser:
     """Setup and return argument parser."""
     parser = argparse.ArgumentParser(
@@ -188,8 +217,10 @@ def setup_arg_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  tts_cli.py "Hello world"
-  tts_cli.py "Hello world" --output custom.wav --check-updates
+  tts_cli.py "Hello world"                    # Outputs: hello_world.wav
+  tts_cli.py "How are you today"              # Outputs: how_are_you_today.wav
+  tts_cli.py "This is a very long sentence" --output custom.wav
+  tts_cli.py "Hello" --check-updates
   tts_cli.py --info
         """
     )
@@ -208,8 +239,7 @@ Examples:
     
     parser.add_argument(
         "--output", "-o",
-        default="output.wav",
-        help="Output audio file path (default: output.wav)"
+        help="Output audio file path (if not specified, auto-generated from text)"
     )
     
     parser.add_argument(
@@ -230,7 +260,43 @@ Examples:
         help="Force CPU usage instead of GPU"
     )
     
+    parser.add_argument(
+        "--max-filename-length",
+        type=int,
+        default=20,
+        help="Maximum length for auto-generated filename (default: 20)"
+    )
+    
     return parser
+
+
+def process_args(args) -> None:
+    """Process command line arguments."""
+    cli = TTSCLI()
+    
+    if args.info:
+        cli.show_model_info(args.model_name)
+        return
+    
+    if not args.text:
+        logger.error("Text is required unless using --info flag")
+        sys.exit(1)
+    
+    # Generate filename if not provided
+    if not args.output:
+        args.output = generate_filename_from_text(args.text, args.max_filename_length)
+    
+    # Generate speech
+    success = cli.generate_speech(
+        text=args.text,
+        output_path=args.output,
+        model_name=args.model_name,
+        check_updates=args.check_updates,
+        gpu=not args.cpu
+    )
+    
+    if not success:
+        sys.exit(1)
 
 
 def main():
@@ -238,30 +304,8 @@ def main():
     parser = setup_arg_parser()
     args = parser.parse_args()
     
-    cli = TTSCLI()
-    
     try:
-        if args.info:
-            cli.show_model_info(args.model_name)
-            return
-            
-        if not args.text:
-            logger.error("Text is required unless using --info flag")
-            parser.print_help()
-            sys.exit(1)
-        
-        # Generate speech
-        success = cli.generate_speech(
-            text=args.text,
-            output_path=args.output,
-            model_name=args.model_name,
-            check_updates=args.check_updates,
-            gpu=not args.cpu
-        )
-        
-        if not success:
-            sys.exit(1)
-            
+        process_args(args)
     except KeyboardInterrupt:
         logger.info("Operation cancelled by user")
         sys.exit(0)

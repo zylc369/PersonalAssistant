@@ -70,7 +70,72 @@ pip install -r requirements-dev.txt
 
 Linux/macOS:
 ```bash
-./tts "Hello world"
+./tts "Hello world"                    # Outputs: hello_world.wav
+./tts "How are you today"           # Outputs: how_are_you_today.wav
+./tts "Good morning everyone"         # Outputs: good_morning_everyone.wav
+```
+
+Windows:
+```cmd
+tts.bat "Hello world"                   # Outputs: hello_world.wav
+tts.bat "How are you today"            # Outputs: how_are_you_today.wav
+```
+
+**Manual usage:**
+```bash
+python tts_cli.py "Hello world"
+python tts_cli.py "How are you today"
+```
+
+### Advanced Usage
+
+**Using launcher script:**
+
+Linux/macOS:
+```bash
+./tts "Hello world" --output my_speech.wav
+./tts "Hello world" --check-updates
+./tts "Hello world" --model-name "tts_models/en/ljspeech/vits"
+./tts --info
+./tts "Hello world" --cpu
+./tts "This is a test" --max-filename-length 15  # Custom filename length
+```
+
+Windows:
+```cmd
+tts.bat "Hello world" --output my_speech.wav
+tts.bat "Hello world" --check-updates
+tts.bat "Hello world" --model-name "tts_models/en/ljspeech/vits"
+tts.bat --info
+tts.bat "Hello world" --cpu
+tts.bat "This is a test" --max-filename-length 15
+```
+
+**Manual usage:**
+```bash
+python tts_cli.py "Hello world" --output my_speech.wav
+python tts_cli.py "Hello world" --check-updates
+python tts_cli.py "Hello world" --model-name "tts_models/en/ljspeech/vits"
+python tts_cli.py --info
+python tts_cli.py "Hello world" --cpu
+python tts_cli.py "This is a test" --max-filename-length 15
+```
+
+### Automatic Filename Generation
+
+**Features:**
+- **Auto-generated filenames** when output path is not specified
+- **Word-based naming**: Takes first 5 words, joins with underscores
+- **Length control**: Default max 20 characters, customizable with `--max-filename-length`
+- **Clean naming**: Removes special characters, converts to lowercase
+- **Smart truncation**: Cuts long names at word boundaries
+
+**Examples:**
+```bash
+./tts "Hello world"                    # → hello_world.wav
+./tts "How are you today"           # → how_are_you_today.wav
+./tts "Good morning everyone"         # → good_morning_everyone.wav
+./tts "This is a very long sentence..." --max-filename-length 15  # → this_is_a_very.wav
 ```
 
 Windows:
@@ -132,10 +197,11 @@ python tts_cli.py "Hello world" --cpu
 
 - `text`: Text to convert to speech (optional if using --info)
 - `--model-name`: TTS model to use (default: tts_models/en/ljspeech/vits)
-- `--output, -o`: Output audio file path (default: output.wav)
+- `--output, -o`: Output audio file path (auto-generated if not specified)
 - `--check-updates`: Check for model updates before processing
 - `--info`: Display model information and exit
 - `--cpu`: Force CPU usage instead of GPU
+- `--max-filename-length`: Maximum length for auto-generated filename (default: 20)
 
 ### Environment Variables
 
