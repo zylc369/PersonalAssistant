@@ -6,8 +6,8 @@
 
 ### 一键使用
 ```bash
-./tts_final.sh "Hello world"
-./tts_final.sh "你好世界" -o my_audio.wav
+./tts.sh "Hello world"
+./tts.sh "你好世界" -o my_audio.wav
 ```
 
 ## ✨ 特点
@@ -22,16 +22,13 @@
 
 ```bash
 # 基本使用
-./tts_final.sh "Hello world"
+./tts.sh "Hello world"
 
 # 指定输出文件
-./tts_final.sh "你好世界" -o my_audio.wav
-
-# 使用Python版本
-python3 tts_foolproof_fixed.py "How are you today?"
+./tts.sh "你好世界" -o my_audio.wav
 
 # 指定模型
-./tts_final.sh "Hello" --model-name tts_models/en/ljspeech/vits
+./tts.sh "Hello" --model-name tts_models/en/ljspeech/vits
 ```
 
 ## 🛠️ 自动化功能
@@ -47,7 +44,7 @@ python3 tts_foolproof_fixed.py "How are you today?"
 
 ## 📁 文件说明
 
-- `tts_final.sh` - 一键式傻瓜脚本
+- `tts.sh` - 一键式傻瓜脚本
 - `tts_cli.py` - 核心CLI工具
 - `tts_venv/` - 自动创建的虚拟环境
 
