@@ -36,6 +36,9 @@ print_error() {
     echo -e "${RED}${EMOJI_CROSS} 错误:${NC} $1"
 }
 
+# 获取脚本所在目录的绝对路径（全局变量）
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # 检查Python
 check_python() {
     print_step "检查Python安装..."
@@ -75,9 +78,11 @@ check_python() {
 
 # 修复兼容性问题
 fix_compatibility() {
-    if [ -d "tts_venv" ] && [ -f "tts_venv/lib/python3.9/site-packages/bangla/__init__.py" ]; then
+    VENV_PATH="$SCRIPT_DIR/tts_venv"
+    
+    if [ -d "$VENV_PATH" ] && [ -f "$VENV_PATH/lib/python3.9/site-packages/bangla/__init__.py" ]; then
         print_step "修复", "Python 3.9兼容性问题..."
-        sed -i '' 's/ordinal: bool | None = False/ordinal = False/' tts_venv/lib/python3.9/site-packages/bangla/__init__.py 2>/dev/null || true
+        sed -i '' 's/ordinal: bool | None = False/ordinal = False/' "$VENV_PATH/lib/python3.9/site-packages/bangla/__init__.py" 2>/dev/null || true
         print_success "兼容性修复完成"
     fi
 }
@@ -86,16 +91,18 @@ fix_compatibility() {
 setup_venv() {
     print_step "设置虚拟环境..."
     
-    if [ ! -d "tts_venv" ]; then
-        print_step "创建虚拟环境..."
-        $PYTHON_CMD -m venv tts_venv
+    VENV_PATH="$SCRIPT_DIR/tts_venv"
+    
+    if [ ! -d "$VENV_PATH" ]; then
+        print_step "创建虚拟环境在: $VENV_PATH..."
+        $PYTHON_CMD -m venv "$VENV_PATH"
         print_success "虚拟环境创建完成"
     else
-        print_success "虚拟环境已存在"
+        print_success "虚拟环境已存在: $VENV_PATH"
     fi
     
     # 激活虚拟环境
-    source tts_venv/bin/activate
+    source "$VENV_PATH/bin/activate"
     
     # 检查依赖
     print_step "检查TTS依赖..."
@@ -127,10 +134,12 @@ run_tts() {
     local output_file="$2"
     local model_name="$3"
     
+    VENV_PATH="$SCRIPT_DIR/tts_venv"
+    
     print_step "生成语音: '$text'"
     
     # 构建命令
-    cmd="source tts_venv/bin/activate && python tts_cli.py \"$text\""
+    cmd="source \"$VENV_PATH/bin/activate\" && python \"$SCRIPT_DIR/tts_cli.py\" \"$text\""
     
     if [ -n "$output_file" ]; then
         cmd="$cmd -o \"$output_file\""
