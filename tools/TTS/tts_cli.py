@@ -25,9 +25,13 @@ except ImportError as e:
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    force=True  # Force basicConfig even if logging is already configured
 )
 logger = logging.getLogger(__name__)
+
+# Make our logger more verbose to ensure we see the output
+logger.setLevel(logging.INFO)
 
 
 class TTSCLI:
@@ -121,11 +125,12 @@ class TTSCLI:
             
             # Display model location
             model_path = self.get_model_path()
-            logger.info(f"Model location: {model_path}")
-            logger.info(f"Model files stored in: {model_path}/{model_name.replace('/', '--')}")
+            print(f"[INFO] Model location: {model_path}")
+            print(f"[INFO] Model files stored in: {model_path}/{model_name.replace('/', '--')}")
             
             # Generate speech
-            logger.info(f"Generating speech for: '{text[:50]}{'...' if len(text) > 50 else ''}'")
+            print(f"[INFO] Generating speech for: '{text[:50]}{'...' if len(text) > 50 else ''}'")
+            print(f"[INFO] Output file: {output_path}")
             
             # Use tts_to_file for direct file output
             if self.tts is not None:
@@ -133,7 +138,7 @@ class TTSCLI:
             else:
                 raise RuntimeError("Failed to load TTS model")
             
-            logger.info(f"Speech generated successfully: {output_path}")
+            print(f"[INFO] Speech generated successfully: {output_path}")
             return True
             
         except Exception as e:
