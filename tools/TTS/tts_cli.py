@@ -50,10 +50,9 @@ class TTSCLI:
         custom_path = os.environ.get('COQUI_MODEL_PATH')
         if custom_path and os.path.exists(custom_path):
             return custom_path
-            
-        # Default to user data directory
-        user_data_dir = Path.home() / '.local' / 'share' / 'tts'
-        return str(user_data_dir)
+        
+        # Use Coqui TTS ModelManager to get the actual model path
+        return str(self.model_manager.output_prefix)
     
     def check_model_updates(self, model_name: str) -> bool:
         """

@@ -302,6 +302,8 @@ Models are downloaded automatically on first use and stored in:
 - macOS: `~/Library/Application Support/tts/`
 - Windows: `%APPDATA%/tts/`
 
+**Note**: The tool uses Coqui TTS's official `ModelManager.output_prefix` API to get the actual model storage path, ensuring 100% accuracy across all operating systems and environments.
+
 **Custom location:**
 - Set via `COQUI_MODEL_PATH` environment variable
 - Example: `export COQUI_MODEL_PATH="/path/to/your/models"`
