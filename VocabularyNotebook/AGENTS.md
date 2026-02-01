@@ -1,7 +1,7 @@
 # AGENTS.md - Vocabulary Notebook Assistant Guidelines
 
 ## Project Overview
-This is a personal vocabulary notebook project designed to help users learn English words. The assistant helps translate words, provide phonetics and example sentences, and record them in VocabularyNotebook.md for later study.
+This is a personal vocabulary notebook project designed to help users learn English words. The assistant helps translate words, provide phonetics and example sentences, generate audio pronunciations using TTS, and record them in VocabularyNotebook.md for later study.
 
 ## Commands
 Since this is a documentation-based project, there are no traditional build/lint/test commands. However, here are useful operations:
@@ -12,21 +12,46 @@ Since this is a documentation-based project, there are no traditional build/lint
 - Search vocabulary: `grep -i "word" VocabularyNotebook.md`
 - Backup vocabulary: `cp VocabularyNotebook.md VocabularyNotebook_backup_$(date +%Y%m%d).md`
 
+### Audio Generation
+- Generate TTS audio: `/Users/aserlili/Documents/Codes/PersonalAssistant/tools/TTS/tts.sh "[word]" --output audio/[word].mp3`
+- Batch audio generation: Use shell script to process all words
+- Audio directory: `audio/` (automatically created if not exists)
+
 ### Validation
 - Check markdown syntax: Use any markdown linter
 - Verify phonetic format: Ensure IPA brackets [] are properly used
 - Validate structure: Check each entry follows the prescribed format
+- Verify audio files exist: `ls -la audio/`
 
 ## Vocabulary Recording Format
 
-### Recommended Format (Table-based)
+### Recommended Format (Table-based with Audio)
 ```markdown
 # Vocabulary Notebook
 
 | Word | Phonetic | Translation | Example Sentences |
 |------|----------|-------------|-------------------|
-| compatibility | /kəmˌpætəˈbɪləti/ | 兼容性, 相容性, 协调性 | The new software has excellent compatibility with older systems. (新软件与旧系统有极佳的兼容性。)<br>Check compatibility before purchasing hardware. (购买硬件前请检查兼容性。)<br>The couple's compatibility was evident in their shared interests. (这对情侣的协调性在他们共同的兴趣中显而易见。) |
-| format | /ˈfɔːrmæt/ | 格式, 版式, 格局 | Please follow the specified format when submitting your report. (提交报告时请遵循指定格式。)<br>The document is available in digital format. (该文档有数字格式版本。)<br>She changed the format of the presentation to make it more engaging. (她改变了演示文稿的版式使其更具吸引力。) |
+| compatibility | /kəmˌpætəˈbɪləti/ 🔊 | 兼容性, 相容性, 协调性 | The new software has excellent compatibility with older systems. (新软件与旧系统有极佳的兼容性。)<br>Check compatibility before purchasing hardware. (购买硬件前请检查兼容性。)<br>The couple's compatibility was evident in their shared interests. (这对情侣的协调性在他们共同的兴趣中显而易见。) |
+| format | /ˈfɔːrmæt/ 🔊 | 格式, 版式, 格局 | Please follow the specified format when submitting your report. (提交报告时请遵循指定格式。)<br>The document is available in digital format. (该文档有数字格式版本。)<br>She changed the format of the presentation to make it more engaging. (她改变了演示文稿的版式使其更具吸引力。) |
+```
+
+### Alternative Detailed Format (with Audio)
+```markdown
+## Word
+
+**Phonetic:** [/ˈfɔːrmæt/ 🔊]()
+
+**Definition:** A particular way in which something is arranged or presented
+
+**Part of Speech:** noun
+
+**Example Sentences:**
+1. Please follow the specified format when submitting your report.
+2. The document is available in both digital and print format.
+
+**Date Added:** 2026-02-01
+
+---
 ```
 
 ### Alternative Detailed Format
@@ -54,6 +79,7 @@ Since this is a documentation-based project, there are no traditional build/lint
 - Main vocabulary file: `VocabularyNotebook.md`
 - Backup files: `VocabularyNotebook_backup_YYYYMMDD.md`
 - This guide: `AGENTS.md`
+- Audio files: `audio/[word].mp3` (TTS generated pronunciations)
 
 ### Markdown Formatting
 1. Use `##` for word headers (H2 level)
@@ -100,6 +126,8 @@ Since this is a documentation-based project, there are no traditional build/lint
 3. Offer synonyms and antonyms when helpful
 4. Include context-specific examples when user mentions usage scenario
 5. Suggest related words or word families when beneficial
+6. **Generate audio pronunciation**: Always use TTS skill to create audio file for new words
+7. **Add audio icon**: Include 🔊 emoji after phonetic transcription for clickable audio playback
 
 ### When Searching/Reviewing
 1. Use case-insensitive search
@@ -125,3 +153,5 @@ Since this is a documentation-based project, there are no traditional build/lint
 - Provide both US and UK pronunciations when significantly different
 - Include context that helps non-native speakers understand usage
 - Consider adding difficulty ratings for advanced learners
+- **Audio Support**: All words include 🔊 audio icon for pronunciation playback
+- **TTS Integration**: Automated audio generation for all vocabulary entries
