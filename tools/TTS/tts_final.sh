@@ -107,7 +107,7 @@ setup_venv() {
     # 安装依赖
     print_step "安装TTS依赖（这可能需要几分钟）..."
     pip install --upgrade pip
-    pip install 'TTS>=0.21.0,<0.22.0' 'numpy<2.0.0' 'torch>=2.0.0,<2.3.0' torchaudio
+    pip install 'TTS>=0.21.0,<0.22.0' 'numpy<2.0.0' 'torch>=2.0.0,<2.3.0' 'urllib3<2.0.0' torchaudio
     
     if [ $? -ne 0 ]; then
         print_error "依赖安装失败"

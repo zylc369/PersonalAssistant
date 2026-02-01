@@ -107,7 +107,7 @@ def setup_venv():
         run_cmd(f"{pip_cmd} install --upgrade pip")
         
         # 安装依赖
-        install_cmd = f"{pip_cmd} install 'TTS>=0.21.0,<0.22.0' 'numpy<2.0.0' 'torch>=2.0.0,<2.3.0' torchaudio"
+        install_cmd = f"{pip_cmd} install 'TTS>=0.21.0,<0.22.0' 'numpy<2.0.0' 'torch>=2.0.0,<2.3.0' 'urllib3<2.0.0' torchaudio"
         success, output = run_cmd(install_cmd)
         
         if not success:
