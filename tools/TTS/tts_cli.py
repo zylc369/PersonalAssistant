@@ -1,0 +1,269 @@
+#!/usr/bin/env python3
+"""
+TTS CLI Tool - Text to Speech conversion for English learning.
+
+This module provides command-line interface for converting English text
+to speech using Coqui TTS models.
+"""
+
+import argparse
+import logging
+import os
+import sys
+from pathlib import Path
+from typing import Optional
+
+try:
+    from TTS.api import TTS
+    from TTS.utils.manage import ModelManager
+    import torch
+    from model_updater import ModelUpdateChecker
+except ImportError as e:
+    print("Error: TTS package not found. Please install with: pip install TTS")
+    sys.exit(1)
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+
+class TTSCLI:
+    """Main TTS CLI application class."""
+    
+    def __init__(self):
+        """Initialize TTS CLI."""
+        self.tts: Optional[TTS] = None
+        self.model_manager = ModelManager()
+        model_path = self.get_model_path()
+        self.update_checker = ModelUpdateChecker(model_path)
+        
+    def get_model_path(self) -> str:
+        """Get the model storage path."""
+        # Check environment variable first
+        custom_path = os.environ.get('COQUI_MODEL_PATH')
+        if custom_path and os.path.exists(custom_path):
+            return custom_path
+            
+        # Default to user data directory
+        user_data_dir = Path.home() / '.local' / 'share' / 'tts'
+        return str(user_data_dir)
+    
+    def check_model_updates(self, model_name: str) -> bool:
+        """
+        Check if model updates are available.
+        
+        Args:
+            model_name: Name of the model to check
+            
+        Returns:
+            True if updates available, False otherwise
+        """
+        try:
+            logger.info("Checking for model updates...")
+            return self.update_checker.check_for_updates(model_name)
+        except Exception as e:
+            logger.warning(f"Could not check for updates: {e}")
+            return False
+    
+    def load_model(self, model_name: str, gpu: bool = True) -> TTS:
+        """
+        Load TTS model with proper error handling.
+        
+        Args:
+            model_name: Name of the model to load
+            gpu: Whether to use GPU acceleration
+            
+        Returns:
+            Loaded TTS model
+            
+        Raises:
+            RuntimeError: If model loading fails
+        """
+        try:
+            device = "cuda" if gpu and torch.cuda.is_available() else "cpu"
+            logger.info(f"Loading model: {model_name}")
+            logger.info(f"Using device: {device}")
+            
+            tts = TTS(model_name=model_name).to(device)
+            return tts
+        except Exception as e:
+            logger.error(f"Failed to load model {model_name}: {e}")
+            raise RuntimeError(f"Model loading failed: {e}")
+    
+    def generate_speech(self, text: str, output_path: str, model_name: str, 
+                       check_updates: bool = False, gpu: bool = True) -> bool:
+        """
+        Generate speech from text and save to file.
+        
+        Args:
+            text: Input text to convert to speech
+            output_path: Path where audio file will be saved
+            model_name: TTS model to use
+            check_updates: Whether to check for model updates
+            gpu: Whether to use GPU acceleration
+            
+        Returns:
+            True if successful, False otherwise
+        """
+        if not text.strip():
+            logger.error("Text cannot be empty")
+            return False
+            
+        if check_updates:
+            self.check_model_updates(model_name)
+        
+        try:
+            # Load model
+            self.tts = self.load_model(model_name, gpu)
+            
+            # Display model location
+            model_path = self.get_model_path()
+            logger.info(f"Model location: {model_path}")
+            logger.info(f"Model files stored in: {model_path}/{model_name.replace('/', '--')}")
+            
+            # Generate speech
+            logger.info(f"Generating speech for: '{text[:50]}{'...' if len(text) > 50 else ''}'")
+            
+            # Use tts_to_file for direct file output
+            if self.tts is not None:
+                self.tts.tts_to_file(text=text, file_path=output_path)
+            else:
+                raise RuntimeError("Failed to load TTS model")
+            
+            logger.info(f"Speech generated successfully: {output_path}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Failed to generate speech: {e}")
+            return False
+    
+    def show_model_info(self, model_name: str) -> None:
+        """Display model information and paths."""
+        model_path = self.get_model_path()
+        print(f"TTS Model Information:")
+        print(f"  Model name: {model_name}")
+        print(f"  Model storage path: {model_path}")
+        print(f"  Model directory: {model_path}/{model_name.replace('/', '--')}")
+        print(f"  Custom model path (COQUI_MODEL_PATH): {os.environ.get('COQUI_MODEL_PATH', 'Not set')}")
+        
+        # List local models
+        try:
+            local_models = self.update_checker.list_local_models()
+            if local_models:
+                print(f"\nLocal models ({len(local_models)} total):")
+                for model in local_models:
+                    print(f"  - {model['name']}")
+                    if 'last_modified_date' in model:
+                        print(f"    Last modified: {model['last_modified_date']}")
+            else:
+                print("\nNo local models found")
+        except Exception as e:
+            logger.warning(f"Could not list local models: {e}")
+        
+        # List available remote models
+        try:
+            models = TTS().list_models()
+            print(f"\nAvailable remote models ({len(models)} total):")
+            en_models = [m for m in models if m.startswith('tts_models/en/')]
+            for model in en_models[:10]:  # Show first 10 English models
+                print(f"  - {model}")
+            if len(en_models) > 10:
+                print(f"  ... and {len(en_models) - 10} more English models")
+        except Exception as e:
+            logger.warning(f"Could not list remote models: {e}")
+
+
+def setup_arg_parser() -> argparse.ArgumentParser:
+    """Setup and return argument parser."""
+    parser = argparse.ArgumentParser(
+        description="Text-to-Speech CLI for English learning",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  tts_cli.py "Hello world"
+  tts_cli.py "Hello world" --output custom.wav --check-updates
+  tts_cli.py --info
+        """
+    )
+    
+    parser.add_argument(
+        "text",
+        nargs="?",
+        help="Text to convert to speech"
+    )
+    
+    parser.add_argument(
+        "--model-name",
+        default="tts_models/en/ljspeech/vits",
+        help="TTS model to use (default: tts_models/en/ljspeech/vits)"
+    )
+    
+    parser.add_argument(
+        "--output", "-o",
+        default="output.wav",
+        help="Output audio file path (default: output.wav)"
+    )
+    
+    parser.add_argument(
+        "--check-updates",
+        action="store_true",
+        help="Check for model updates before processing"
+    )
+    
+    parser.add_argument(
+        "--info",
+        action="store_true",
+        help="Display model information and exit"
+    )
+    
+    parser.add_argument(
+        "--cpu",
+        action="store_true",
+        help="Force CPU usage instead of GPU"
+    )
+    
+    return parser
+
+
+def main():
+    """Main entry point for the CLI tool."""
+    parser = setup_arg_parser()
+    args = parser.parse_args()
+    
+    cli = TTSCLI()
+    
+    try:
+        if args.info:
+            cli.show_model_info(args.model_name)
+            return
+            
+        if not args.text:
+            logger.error("Text is required unless using --info flag")
+            parser.print_help()
+            sys.exit(1)
+        
+        # Generate speech
+        success = cli.generate_speech(
+            text=args.text,
+            output_path=args.output,
+            model_name=args.model_name,
+            check_updates=args.check_updates,
+            gpu=not args.cpu
+        )
+        
+        if not success:
+            sys.exit(1)
+            
+    except KeyboardInterrupt:
+        logger.info("Operation cancelled by user")
+        sys.exit(0)
+    except Exception as e:
+        logger.error(f"Unexpected error: {e}")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
