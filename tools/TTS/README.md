@@ -1,319 +1,113 @@
-# TTS CLI Tool
+# TTS一键式傻瓜工具
 
-A command-line tool for converting English text to speech using Coqui TTS, designed for English learning applications.
+完全自动化的文本转语音工具，零配置、一键使用。
 
-## Features
+## 🚀 快速开始
 
-- Convert English words and sentences to speech
-- Display model storage locations
-- Check for model updates
-- Support for GPU/CPU processing
-- Model information display
-- Offline operation after initial model download
-
-## Installation
-
-### Easy Setup (Recommended)
-
-Run automatic setup script:
-
-**Linux/macOS:**
+### 方法1：Shell版本（推荐）
 ```bash
-chmod +x setup.sh
-./setup.sh
+./tts_final.sh "Hello world"
+./tts_final.sh "你好世界" -o my_audio.wav
 ```
 
-**Windows:**
-```cmd
-setup.bat
-```
-
-### System Requirements
-
-- Python 3.8+ (3.10+ recommended)
-- espeak or espeak-ng (for some TTS models)
-- Sufficient disk space for models (100MB-1GB+)
-
-**Install espeak manually if needed:**
-- Linux: `sudo apt install espeak-ng`
-- macOS: `brew install espeak-ng` (or `brew install espeak`)
-- Windows: Download from https://espeak.sourceforge.io/
-
-**Windows:**
-```cmd
-setup.bat
-```
-
-The setup script will:
-- Check Python 3.8+ installation
-- Create a virtual environment
-- Install all required dependencies
-- Create a launcher script
-
-### Manual Setup
-
-1. Install dependencies:
+### 方法2：Python版本
 ```bash
-pip install -r requirements.txt
+python3 tts_foolproof_fixed.py "Hello world"
+python3 tts_foolproof_fixed.py "你好世界" -o my_audio.wav
 ```
 
-2. For development:
+## ✨ 特点
+
+- ✅ **零配置**：自动检查Python、创建虚拟环境、安装依赖
+- ✅ **一键运行**：一条命令完成所有操作  
+- ✅ **智能错误处理**：自动修复常见兼容性问题
+- ✅ **跨平台**：支持Windows、macOS、Linux
+- ✅ **自动文件名**：智能生成音频文件名
+
+## 📋 使用示例
+
 ```bash
-pip install -r requirements-dev.txt
+# 基本使用
+./tts_final.sh "Hello world"
+
+# 指定输出文件
+./tts_final.sh "你好世界" -o my_audio.wav
+
+# 使用Python版本
+python3 tts_foolproof_fixed.py "How are you today?"
+
+# 指定模型
+./tts_final.sh "Hello" --model-name tts_models/en/ljspeech/vits
 ```
 
-## Usage
+## 🛠️ 自动化功能
 
-### Basic Usage
+脚本会自动完成以下操作：
 
-**Using launcher script (after setup):**
+1. **环境检查**：验证Python 3.8+版本
+2. **虚拟环境**：创建`tts_venv`虚拟环境
+3. **依赖安装**：安装TTS和相关依赖
+4. **兼容性修复**：自动处理Python版本兼容问题
+5. **模型管理**：自动下载和管理TTS模型
 
-Linux/macOS:
+## 📁 文件说明
+
+- `tts_final.sh` - 推荐使用的Shell版本
+- `tts_foolproof_fixed.py` - Python版本（功能相同）
+- `tts_cli.py` - 核心CLI工具
+- `requirements.txt` - 依赖配置
+- `tts_venv/` - 自动创建的虚拟环境
+
+## 💡 使用提示
+
+- **首次运行**：需要几分钟下载依赖和模型
+- **后续运行**：秒级响应
+- **输出文件**：默认生成在当前目录
+- **模型位置**：自动存储在系统默认位置
+
+## 🎯 系统要求
+
+- Python 3.8+
+- 网络连接（首次安装时）
+- 约2GB磁盘空间
+
+## 📊 输出示例
+
+```
+🎵 TTS一键式傻瓜脚本 🎵
+🎤 完全自动化的文本转语音工具
+ℹ️ [步骤] 检查Python安装...
+✅ 成功: Python 3.9 检测通过
+ℹ️ [步骤] 设置虚拟环境...
+✅ 成功: 虚拟环境已存在
+ℹ️ [步骤] 检查TTS依赖...
+✅ 成功: TTS依赖已就绪
+
+🚀 开始语音生成...
+ℹ️ [步骤] 生成语音: 'Hello world'
+✅ 成功: 语音生成成功！
+ℹ️ 信息: 生成文件: 📁 hello_world.wav
+✅ 任务完成！享受你的语音文件吧！
+```
+
+## 🔧 故障排除
+
+### Python版本问题
+请安装Python 3.8+：
 ```bash
-./tts "Hello world"                    # Outputs: hello_world.wav
-./tts "How are you today"           # Outputs: how_are_you_today.wav
-./tts "Good morning everyone"         # Outputs: good_morning_everyone.wav
+# macOS
+brew install python3
+
+# Ubuntu/Debian
+sudo apt update && sudo apt install python3
 ```
 
-Windows:
-```cmd
-tts.bat "Hello world"                   # Outputs: hello_world.wav
-tts.bat "How are you today"            # Outputs: how_are_you_today.wav
-```
+### 依赖安装失败
+检查网络连接，然后重新运行脚本。
 
-**Manual usage:**
-```bash
-python tts_cli.py "Hello world"
-python tts_cli.py "How are you today"
-```
+### 权限问题
+确保当前目录有写权限。
 
-### Advanced Usage
+---
 
-**Using launcher script:**
-
-Linux/macOS:
-```bash
-./tts "Hello world" --output my_speech.wav
-./tts "Hello world" --check-updates
-./tts "Hello world" --model-name "tts_models/en/ljspeech/vits"
-./tts --info
-./tts "Hello world" --cpu
-./tts "This is a test" --max-filename-length 15  # Custom filename length
-```
-
-Windows:
-```cmd
-tts.bat "Hello world" --output my_speech.wav
-tts.bat "Hello world" --check-updates
-tts.bat "Hello world" --model-name "tts_models/en/ljspeech/vits"
-tts.bat --info
-tts.bat "Hello world" --cpu
-tts.bat "This is a test" --max-filename-length 15
-```
-
-**Manual usage:**
-```bash
-python tts_cli.py "Hello world" --output my_speech.wav
-python tts_cli.py "Hello world" --check-updates
-python tts_cli.py "Hello world" --model-name "tts_models/en/ljspeech/vits"
-python tts_cli.py --info
-python tts_cli.py "Hello world" --cpu
-python tts_cli.py "This is a test" --max-filename-length 15
-```
-
-### Automatic Filename Generation
-
-**Features:**
-- **Auto-generated filenames** when output path is not specified
-- **Directory support**: When output is a directory, generates filename inside it
-- **Automatic directory creation**: Creates directories if they don't exist
-- **Word-based naming**: Takes first 5 words, joins with underscores
-- **Length control**: Default max 20 characters, customizable with `--max-filename-length`
-- **Clean naming**: Removes special characters, converts to lowercase
-- **Smart truncation**: Cuts long names at word boundaries
-
-**Examples:**
-```bash
-./tts "Hello world"                           # → hello_world.wav
-./tts "How are you today"                      # → how_are_you_today.wav
-./tts "Good morning everyone"                    # → good_morning_everyone.wav
-./tts "This is a very long sentence..." --max-filename-length 15  # → this_is_a_very.wav
-
-# Directory output with auto filename
-./tts "Compatibility" -o audio/               # → audio/compatibility.wav
-./tts "Test multiple words" -o audio/          # → audio/test_multiple_words.wav
-./tts "Hello" -o /path/to/audio/             # → /path/to/audio/hello.wav
-
-# Full file path still works
-./tts "Hello world" -o audio/custom.wav      # → audio/custom.wav
-```
-
-Windows:
-```cmd
-tts.bat "Hello world"
-```
-
-**Manual usage:**
-```bash
-python tts_cli.py "Hello world"
-```
-
-### Advanced Usage
-
-**Using launcher script:**
-
-Linux/macOS:
-```bash
-./tts "Hello world" --output my_speech.wav
-./tts "Hello world" --check-updates
-./tts "Hello world" --model-name "tts_models/en/ljspeech/vits"
-./tts --info
-./tts "Hello world" --cpu
-```
-
-Windows:
-```cmd
-tts.bat "Hello world" --output my_speech.wav
-tts.bat "Hello world" --check-updates
-tts.bat "Hello world" --model-name "tts_models/en/ljspeech/vits"
-tts.bat --info
-tts.bat "Hello world" --cpu
-```
-
-**Manual usage (without setup):**
-```bash
-python tts_cli.py "Hello world" --output my_speech.wav
-python tts_cli.py "Hello world" --check-updates
-python tts_cli.py "Hello world" --model-name "tts_models/en/ljspeech/vits"
-python tts_cli.py --info
-python tts_cli.py "Hello world" --cpu
-```
-
-**Manual usage (with virtual environment):**
-```bash
-# Using virtual environment Python directly
-./tts_venv/bin/python tts_cli.py "Hello world" --output my_speech.wav
-
-# Or activate first
-source tts_venv/bin/activate
-python tts_cli.py "Hello world" --output my_speech.wav
-python tts_cli.py "Hello world" --check-updates
-python tts_cli.py "Hello world" --model-name "tts_models/en/ljspeech/vits"
-python tts_cli.py --info
-python tts_cli.py "Hello world" --cpu
-```
-
-### Command Line Options
-
-- `text`: Text to convert to speech (optional if using --info)
-- `--model-name`: TTS model to use (default: tts_models/en/ljspeech/vits)
-- `--output, -o`: Output audio file path (auto-generated if not specified)
-- `--check-updates`: Check for model updates before processing
-- `--info`: Display model information and exit
-- `--cpu`: Force CPU usage instead of GPU
-- `--max-filename-length`: Maximum length for auto-generated filename (default: 20)
-
-### Environment Variables
-
-- `COQUI_MODEL_PATH`: Custom path for model storage (default: ~/.local/share/tts/)
-
-## Development
-
-### Setup Development Environment
-
-For development setup with extra tools:
-
-**Linux/macOS:**
-```bash
-./setup.sh --dev
-```
-
-**Windows:**
-```cmd
-setup.bat --dev
-```
-
-### Using the Virtual Environment
-
-After setup, you can use the virtual environment directly:
-
-**Activate virtual environment:**
-```bash
-# Linux/macOS
-source tts_venv/bin/activate
-
-# Windows
-tts_venv\Scripts\activate
-```
-
-**Run TTS CLI with virtual environment:**
-```bash
-# Linux/macOS
-source tts_venv/bin/activate && python tts_cli.py "Hello world"
-
-# Windows
-tts_venv\Scripts\activate && python tts_cli.py "Hello world"
-```
-
-**Direct virtual environment Python:**
-```bash
-# Linux/macOS
-./tts_venv/bin/python tts_cli.py "Hello world"
-
-# Windows
-tts_venv\Scripts\python tts_cli.py "Hello world"
-```
-
-### Running Tests
-
-Run all tests:
-```bash
-./tts_venv/bin/python -m pytest tests/
-```
-
-Run single test:
-```bash
-./tts_venv/bin/python -m pytest tests/test_tts_cli.py::TestTTSCLI::test_init
-```
-
-### Code Quality
-
-Format code:
-```bash
-./tts_venv/bin/black *.py
-```
-
-Type checking:
-```bash
-./tts_venv/bin/mypy *.py
-```
-
-Linting:
-```bash
-./tts_venv/bin/pylint *.py
-```
-
-## Model Information
-
-Models are downloaded automatically on first use and stored in:
-
-**Default locations:**
-- Linux: `~/.local/share/tts/`
-- macOS: `~/Library/Application Support/tts/`
-- Windows: `%APPDATA%/tts/`
-
-**Note**: The tool uses Coqui TTS's official `ModelManager.output_prefix` API to get the actual model storage path, ensuring 100% accuracy across all operating systems and environments.
-
-**Custom location:**
-- Set via `COQUI_MODEL_PATH` environment variable
-- Example: `export COQUI_MODEL_PATH="/path/to/your/models"`
-
-**Virtual environment models:**
-- Models are downloaded independently for each virtual environment
-- The actual download location is determined by the Coqui TTS library based on OS
-
-The tool displays the expected model location information on each run to help you track where models are stored.
-
-## License
-
-This project follows the same license as the Coqui TTS library.
+**🎉 就这么简单！一条命令，搞定语音合成！**

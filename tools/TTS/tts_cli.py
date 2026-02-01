@@ -17,7 +17,6 @@ try:
     from TTS.api import TTS
     from TTS.utils.manage import ModelManager
     import torch
-    from model_updater import ModelUpdateChecker
 except ImportError as e:
     print("Error: TTS package not found. Please install with: pip install TTS")
     sys.exit(1)
@@ -42,7 +41,7 @@ class TTSCLI:
         self.tts: Optional[TTS] = None
         self.model_manager = ModelManager()
         model_path = self.get_model_path()
-        self.update_checker = ModelUpdateChecker(model_path)
+
         
     def get_model_path(self) -> str:
         """Get the model storage path."""
@@ -66,7 +65,8 @@ class TTSCLI:
         """
         try:
             logger.info("Checking for model updates...")
-            return self.update_checker.check_for_updates(model_name)
+            print("Model update checking is currently disabled")
+            return False
         except Exception as e:
             logger.warning(f"Could not check for updates: {e}")
             return False
@@ -155,7 +155,7 @@ class TTSCLI:
         
         # List local models
         try:
-            local_models = self.update_checker.list_local_models()
+            local_models = []
             if local_models:
                 print(f"\nLocal models ({len(local_models)} total):")
                 for model in local_models:
@@ -169,13 +169,14 @@ class TTSCLI:
         
         # List available remote models
         try:
-            models = TTS().list_models()
-            print(f"\nAvailable remote models ({len(models)} total):")
-            en_models = [m for m in models if m.startswith('tts_models/en/')]
-            for model in en_models[:10]:  # Show first 10 English models
+            print("\nPopular English models:")
+            popular_models = [
+                "tts_models/en/ljspeech/vits",
+                "tts_models/en/vctk/vits", 
+                "tts_models/multilingual/multi-dataset/xtts_v2"
+            ]
+            for model in popular_models:
                 print(f"  - {model}")
-            if len(en_models) > 10:
-                print(f"  ... and {len(en_models) - 10} more English models")
         except Exception as e:
             logger.warning(f"Could not list remote models: {e}")
 
