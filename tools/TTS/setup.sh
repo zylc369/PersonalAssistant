@@ -61,8 +61,11 @@ validate_python_version() {
     local major=$(echo "$version" | cut -d. -f1)
     local minor=$(echo "$version" | cut -d. -f2)
     
-    # Check if Python 3.8 or higher
+    # Check if Python 3.8 or higher, but recommend 3.10+ for compatibility
     if [[ "$major" -ge 3 && "$minor" -ge 8 ]]; then
+        if [[ "$major" -eq 3 && "$minor" -lt 10 ]]; then
+            print_warning "Python 3.8-3.9 detected. Some TTS models may require Python 3.10+"
+        fi
         return 0
     else
         return 1
@@ -146,8 +149,27 @@ install_dependencies() {
             print_warning "No audio system detected. You may need to install pulseaudio or alsa-utils"
         fi
         
+        # Check for espeak
+        if command_exists espeak || command_exists espeak-ng; then
+            print_success "espeak found"
+        else
+            print_warning "espeak not found. Some TTS models may require espeak:"
+            print_warning "  Ubuntu/Debian: sudo apt install espeak-ng"
+            print_warning "  CentOS/RHEL: sudo yum install espeak-ng"
+            print_warning "  Fedora: sudo dnf install espeak-ng"
+        fi
+        
     elif [[ "$os_type" == "macos" ]]; then
         print_status "macOS detected. Audio should work with CoreAudio"
+        
+        # Check for espeak
+        if command_exists espeak || command_exists espeak-ng; then
+            print_success "espeak found"
+        else
+            print_warning "espeak not found. Some TTS models may require espeak:"
+            print_warning "  Install with: brew install espeak-ng"
+            print_warning "  Or: brew install espeak (deprecated but should work)"
+        fi
         
     elif [[ "$os_type" == "windows" ]]; then
         print_status "Windows detected. Checking for additional dependencies..."
@@ -160,6 +182,14 @@ install_dependencies() {
                 print_warning "Visual C++ Runtime may be required for some TTS models"
                 print_warning "Install Microsoft Visual C++ Redistributable if you encounter issues"
             fi
+        fi
+        
+        # Check for espeak
+        if where espeak >/dev/null 2>&1 || where espeak-ng >/dev/null 2>&1; then
+            print_success "espeak found"
+        else
+            print_warning "espeak not found. Some TTS models may require espeak"
+            print_warning "Download from: https://espeak.sourceforge.io/"
         fi
     fi
     

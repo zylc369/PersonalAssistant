@@ -15,13 +15,29 @@ A command-line tool for converting English text to speech using Coqui TTS, desig
 
 ### Easy Setup (Recommended)
 
-Run the automatic setup script:
+Run automatic setup script:
 
 **Linux/macOS:**
 ```bash
 chmod +x setup.sh
 ./setup.sh
 ```
+
+**Windows:**
+```cmd
+setup.bat
+```
+
+### System Requirements
+
+- Python 3.8+ (3.10+ recommended)
+- espeak or espeak-ng (for some TTS models)
+- Sufficient disk space for models (100MB-1GB+)
+
+**Install espeak manually if needed:**
+- Linux: `sudo apt install espeak-ng`
+- macOS: `brew install espeak-ng` (or `brew install espeak`)
+- Windows: Download from https://espeak.sourceforge.io/
 
 **Windows:**
 ```cmd
@@ -89,8 +105,22 @@ tts.bat --info
 tts.bat "Hello world" --cpu
 ```
 
-**Manual usage:**
+**Manual usage (without setup):**
 ```bash
+python tts_cli.py "Hello world" --output my_speech.wav
+python tts_cli.py "Hello world" --check-updates
+python tts_cli.py "Hello world" --model-name "tts_models/en/ljspeech/vits"
+python tts_cli.py --info
+python tts_cli.py "Hello world" --cpu
+```
+
+**Manual usage (with virtual environment):**
+```bash
+# Using virtual environment Python directly
+./tts_venv/bin/python tts_cli.py "Hello world" --output my_speech.wav
+
+# Or activate first
+source tts_venv/bin/activate
 python tts_cli.py "Hello world" --output my_speech.wav
 python tts_cli.py "Hello world" --check-updates
 python tts_cli.py "Hello world" --model-name "tts_models/en/ljspeech/vits"
@@ -127,6 +157,37 @@ For development setup with extra tools:
 setup.bat --dev
 ```
 
+### Using the Virtual Environment
+
+After setup, you can use the virtual environment directly:
+
+**Activate virtual environment:**
+```bash
+# Linux/macOS
+source tts_venv/bin/activate
+
+# Windows
+tts_venv\Scripts\activate
+```
+
+**Run TTS CLI with virtual environment:**
+```bash
+# Linux/macOS
+source tts_venv/bin/activate && python tts_cli.py "Hello world"
+
+# Windows
+tts_venv\Scripts\activate && python tts_cli.py "Hello world"
+```
+
+**Direct virtual environment Python:**
+```bash
+# Linux/macOS
+./tts_venv/bin/python tts_cli.py "Hello world"
+
+# Windows
+tts_venv\Scripts\python tts_cli.py "Hello world"
+```
+
 ### Running Tests
 
 Run all tests:
@@ -159,10 +220,21 @@ Linting:
 ## Model Information
 
 Models are downloaded automatically on first use and stored in:
-- Default: `~/.local/share/tts/`
-- Custom: Set via `COQUI_MODEL_PATH` environment variable
 
-The tool displays model location information on each run to help you track where models are stored.
+**Default locations:**
+- Linux: `~/.local/share/tts/`
+- macOS: `~/Library/Application Support/tts/`
+- Windows: `%APPDATA%/tts/`
+
+**Custom location:**
+- Set via `COQUI_MODEL_PATH` environment variable
+- Example: `export COQUI_MODEL_PATH="/path/to/your/models"`
+
+**Virtual environment models:**
+- Models are downloaded independently for each virtual environment
+- The actual download location is determined by the Coqui TTS library based on OS
+
+The tool displays the expected model location information on each run to help you track where models are stored.
 
 ## License
 
