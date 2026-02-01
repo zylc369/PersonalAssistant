@@ -4,16 +4,10 @@
 
 ## 🚀 快速开始
 
-### 方法1：Shell版本（推荐）
+### 一键使用
 ```bash
 ./tts_final.sh "Hello world"
 ./tts_final.sh "你好世界" -o my_audio.wav
-```
-
-### 方法2：Python版本
-```bash
-python3 tts_foolproof_fixed.py "Hello world"
-python3 tts_foolproof_fixed.py "你好世界" -o my_audio.wav
 ```
 
 ## ✨ 特点
@@ -53,10 +47,8 @@ python3 tts_foolproof_fixed.py "How are you today?"
 
 ## 📁 文件说明
 
-- `tts_final.sh` - 推荐使用的Shell版本
-- `tts_foolproof_fixed.py` - Python版本（功能相同）
+- `tts_final.sh` - 一键式傻瓜脚本
 - `tts_cli.py` - 核心CLI工具
-- `requirements.txt` - 依赖配置
 - `tts_venv/` - 自动创建的虚拟环境
 
 ## 💡 使用提示

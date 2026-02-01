@@ -38,8 +38,10 @@ class TTSCLI:
     
     def __init__(self):
         """Initialize TTS CLI."""
+        self.logger = logger
         self.tts: Optional[TTS] = None
         self.model_manager = ModelManager()
+        self.current_model: Optional[str] = None
         model_path = self.get_model_path()
 
         
@@ -73,10 +75,10 @@ class TTSCLI:
     
     def load_model(self, model_name: str, gpu: bool = True) -> TTS:
         """
-        Load TTS model with proper error handling.
+        Load TTS model with proper error handling and caching.
         
         Args:
-            model_name: Name of the model to load
+            model_name: Name of model to load
             gpu: Whether to use GPU acceleration
             
         Returns:
@@ -85,13 +87,19 @@ class TTSCLI:
         Raises:
             RuntimeError: If model loading fails
         """
+        # Return cached model if same model is requested
+        if self.tts is not None and self.current_model == model_name:
+            logger.info(f"Using cached model: {model_name}")
+            return self.tts
+            
         try:
             device = "cuda" if gpu and torch.cuda.is_available() else "cpu"
             logger.info(f"Loading model: {model_name}")
             logger.info(f"Using device: {device}")
             
-            tts = TTS(model_name=model_name).to(device)
-            return tts
+            self.tts = TTS(model_name=model_name).to(device)
+            self.current_model = model_name
+            return self.tts
         except Exception as e:
             logger.error(f"Failed to load model {model_name}: {e}")
             raise RuntimeError(f"Model loading failed: {e}")
