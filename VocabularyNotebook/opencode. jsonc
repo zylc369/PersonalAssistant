@@ -1,0 +1,14 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "command": {
+    // This becomes the name of the command
+    "trans-add": {
+      // This is the prompt that will be sent to the LLM
+      "template": "Translate the word \"$1\" into Chinese and add it to the table in the wordbook.",
+      // This is shown as the description in the TUI
+      "description": "Translate and add to wordbook",
+      "agent": "build",
+      "subtask": true
+    }
+  }
+}

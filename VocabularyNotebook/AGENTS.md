@@ -31,15 +31,15 @@ Since this is a documentation-based project, there are no traditional build/lint
 
 | Word | Phonetic | Translation | Example Sentences |
 |------|----------|-------------|-------------------|
-| compatibility | /kəmˌpætəˈbɪləti/ <audio controls><source src="audio/compatibility.mp3" type="audio/mpeg">🔊</audio> | 兼容性, 相容性, 协调性 | The new software has excellent compatibility with older systems. (新软件与旧系统有极佳的兼容性。)<br>Check compatibility before purchasing hardware. (购买硬件前请检查兼容性。)<br>The couple's compatibility was evident in their shared interests. (这对情侣的协调性在他们共同的兴趣中显而易见。) |
-| format | /ˈfɔːrmæt/ <audio controls><source src="audio/format.mp3" type="audio/mpeg">🔊</audio> | 格式, 版式, 格局 | Please follow the specified format when submitting your report. (提交报告时请遵循指定格式。)<br>The document is available in digital format. (该文档有数字格式版本。)<br>She changed the format of the presentation to make it more engaging. (她改变了演示文稿的版式使其更具吸引力。) |
+| compatibility | n. /kəmˌpætəˈbɪləti/ <audio controls><source src="audio/compatibility.mp3" type="audio/mpeg">🔊</audio> | 兼容性, 相容性, 协调性 | The new software has excellent compatibility with older systems. (新软件与旧系统有极佳的兼容性。)<br>Check compatibility before purchasing hardware. (购买硬件前请检查兼容性。)<br>The couple's compatibility was evident in their shared interests. (这对情侣的协调性在他们共同的兴趣中显而易见。) |
+| format | n. /ˈfɔːrmæt/ <audio controls><source src="audio/format.mp3" type="audio/mpeg">🔊</audio> | 格式, 版式, 格局 | Please follow the specified format when submitting your report. (提交报告时请遵循指定格式。)<br>The document is available in digital format. (该文档有数字格式版本。)<br>She changed the format of the presentation to make it more engaging. (她改变了演示文稿的版式使其更具吸引力。) |
 ```
 
 ### Alternative Detailed Format (with Audio)
 ```markdown
 ## Word
 
-**Phonetic:** [/ˈfɔːrmæt/]<audio controls><source src="audio/word.mp3" type="audio/mpeg">🔊</audio>
+**Phonetic:** n. [/ˈfɔːrmæt/]<audio controls><source src="audio/word.mp3" type="audio/mpeg">🔊</audio>
 
 **Definition:** A particular way in which something is arranged or presented
 
@@ -90,19 +90,32 @@ Since this is a documentation-based project, there are no traditional build/lint
 6. Use ISO date format `YYYY-MM-DD` for dates
 
 ### Content Guidelines
-1. **Phonetics:** Always provide IPA transcription in brackets
-2. **Translations:** Provide multiple common Chinese translations separated by commas, focusing on most frequently used meanings
-3. **Examples:** Maximum 4 example sentences. Each English sentence must include Chinese translation in parentheses. Examples should correspond to different translation meanings provided
-4. **Translation Quality:** Provide accurate, natural Chinese translations for both word meanings and example sentences
-5. **Example Selection:** Choose examples that demonstrate common usage contexts and key meanings, covering the various translations provided
+1. **Part of Speech:** Always include part-of-speech abbreviation before phonetic transcription (n., adj., adv., v., etc.)
+2. **Phonetics:** Always provide IPA transcription in brackets
+3. **Translations:** Provide multiple common Chinese translations separated by commas, focusing on most frequently used meanings
+4. **Examples:** Maximum 4 example sentences. Each English sentence must include Chinese translation in parentheses. Examples should correspond to different translation meanings provided
+5. **Translation Quality:** Provide accurate, natural Chinese translations for both word meanings and example sentences
+6. **Example Selection:** Choose examples that demonstrate common usage contexts and key meanings, covering the various translations provided
 
 ### Entry Structure Rules
 1. Each word starts with `## WordName`
-2. Phonetic transcription immediately follows word name
-3. All field labels are bolded with colons
-4. Example sentences are numbered
-5. Date is always included at the end
-6. Horizontal rule separates entries
+2. Part-of-speech abbreviation precedes phonetic transcription (e.g., "n.", "adj.", "adv.", "v.")
+3. Phonetic transcription immediately follows part-of-speech abbreviation
+4. All field labels are bolded with colons
+5. Example sentences are numbered
+6. Date is always included at the end
+7. Horizontal rule separates entries
+
+### Common Part-of-Speech Abbreviations
+- **n.** - noun (名词)
+- **adj.** - adjective (形容词)
+- **adv.** - adverb (副词)
+- **v.** - verb (动词)
+- **prep.** - preposition (介词)
+- **conj.** - conjunction (连词)
+- **int.** - interjection (感叹词)
+- **pron.** - pronoun (代词)
+- **art.** - article (冠词)
 
 ### Writing Style
 - Keep definitions under 20 words when possible
