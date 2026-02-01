@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-TTS傻瓜式一键脚本 - 完全自动化的文本转语音工具
-自动创建虚拟环境、安装依赖、运行TTS
+TTS傻瓜式一键脚本 - 完全自动化的文本转语音工具 (自动修复版)
+自动创建虚拟环境、安装依赖、修复兼容性问题、运行TTS
 """
 
 import os
@@ -57,6 +57,22 @@ def check_python():
     print_msg(f"✅ Python {version.major}.{version.minor} 检测通过", Colors.GREEN)
     return True
 
+def fix_bangla_compatibility():
+    """修复bangla包的Python 3.9兼容性问题"""
+    bangla_file = Path("tts_venv/lib/python3.9/site-packages/bangla/__init__.py")
+    if bangla_file.exists():
+        try:
+            content = bangla_file.read_text()
+            # 修复Python 3.9不支持的类型提示语法
+            if "ordinal: bool | None = False" in content:
+                content = content.replace("ordinal: bool | None = False", "ordinal = False")
+                bangla_file.write_text(content)
+                print_msg("✅ 已修复bangla包兼容性问题", Colors.GREEN)
+                return True
+        except Exception as e:
+            print_msg(f"⚠️ 修复bangla兼容性问题失败: {e}", Colors.YELLOW)
+    return False
+
 def setup_venv():
     """设置虚拟环境"""
     venv_path = Path("tts_venv")
@@ -91,13 +107,17 @@ def setup_venv():
         run_cmd(f"{pip_cmd} install --upgrade pip")
         
         # 安装依赖
-        install_cmd = f"{pip_cmd} install 'TTS>=0.21.0,<0.22.0' 'numpy<2.0.0' 'torch>=2.0.0,<2.3.0' torchaudio 'bangla<0.2.0'"
+        install_cmd = f"{pip_cmd} install 'TTS>=0.21.0,<0.22.0' 'numpy<2.0.0' 'torch>=2.0.0,<2.3.0' torchaudio"
         success, output = run_cmd(install_cmd)
         
         if not success:
             print_msg("❌ 依赖安装失败", Colors.RED)
             print_msg("💡 提示: 请确保网络连接正常", Colors.YELLOW)
             return False
+        
+        # 修复兼容性问题
+        print_step("修复", "Python 3.9兼容性问题...")
+        fix_bangla_compatibility()
     
     print_msg("✅ 虚拟环境和依赖就绪", Colors.GREEN)
     return True
@@ -140,13 +160,13 @@ def run_tts(text, output_file=None, model_name=None):
 def main():
     """主函数"""
     parser = argparse.ArgumentParser(
-        description="TTS傻瓜式一键脚本 - 自动化文本转语音",
+        description="TTS傻瓜式一键脚本 - 自动化文本转语音 (自动修复版)",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 使用示例:
-  python tts_foolproof.py "Hello world"
-  python tts_foolproof.py "你好世界" -o my_audio.wav
-  python tts_foolproof.py "How are you" --model-name tts_models/en/ljspeech/vits
+  python tts_foolproof_fixed.py "Hello world"
+  python tts_foolproof_fixed.py "你好世界" -o my_audio.wav
+  python tts_foolproof_fixed.py "How are you" --model-name tts_models/en/ljspeech/vits
         """
     )
     
@@ -157,7 +177,7 @@ def main():
     
     args = parser.parse_args()
     
-    print_header("TTS傻瓜式一键脚本")
+    print_header("TTS傻瓜式一键脚本 (自动修复版)")
     print_msg("🎤 自动化文本转语音工具", Colors.BLUE)
     
     # 1. 检查Python
