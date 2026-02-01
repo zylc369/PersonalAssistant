@@ -31,15 +31,15 @@ Since this is a documentation-based project, there are no traditional build/lint
 
 | Word | Phonetic | Translation | Example Sentences |
 |------|----------|-------------|-------------------|
-| compatibility | /kəmˌpætəˈbɪləti/ 🔊 | 兼容性, 相容性, 协调性 | The new software has excellent compatibility with older systems. (新软件与旧系统有极佳的兼容性。)<br>Check compatibility before purchasing hardware. (购买硬件前请检查兼容性。)<br>The couple's compatibility was evident in their shared interests. (这对情侣的协调性在他们共同的兴趣中显而易见。) |
-| format | /ˈfɔːrmæt/ 🔊 | 格式, 版式, 格局 | Please follow the specified format when submitting your report. (提交报告时请遵循指定格式。)<br>The document is available in digital format. (该文档有数字格式版本。)<br>She changed the format of the presentation to make it more engaging. (她改变了演示文稿的版式使其更具吸引力。) |
+| compatibility | /kəmˌpætəˈbɪləti/ <audio controls><source src="audio/compatibility.mp3" type="audio/mpeg">🔊</audio> | 兼容性, 相容性, 协调性 | The new software has excellent compatibility with older systems. (新软件与旧系统有极佳的兼容性。)<br>Check compatibility before purchasing hardware. (购买硬件前请检查兼容性。)<br>The couple's compatibility was evident in their shared interests. (这对情侣的协调性在他们共同的兴趣中显而易见。) |
+| format | /ˈfɔːrmæt/ <audio controls><source src="audio/format.mp3" type="audio/mpeg">🔊</audio> | 格式, 版式, 格局 | Please follow the specified format when submitting your report. (提交报告时请遵循指定格式。)<br>The document is available in digital format. (该文档有数字格式版本。)<br>She changed the format of the presentation to make it more engaging. (她改变了演示文稿的版式使其更具吸引力。) |
 ```
 
 ### Alternative Detailed Format (with Audio)
 ```markdown
 ## Word
 
-**Phonetic:** [/ˈfɔːrmæt/ 🔊]()
+**Phonetic:** [/ˈfɔːrmæt/]<audio controls><source src="audio/word.mp3" type="audio/mpeg">🔊</audio>
 
 **Definition:** A particular way in which something is arranged or presented
 
