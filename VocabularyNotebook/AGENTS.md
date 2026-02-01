@@ -25,8 +25,8 @@ Since this is a documentation-based project, there are no traditional build/lint
 
 | Word | Phonetic | Translation | Example Sentences |
 |------|----------|-------------|-------------------|
-| compatibility | /kəmˌpætəˈbɪləti/ | 兼容性, 相容性, 协调性 | The new software has excellent compatibility with older systems. (新软件与旧系统有极佳的兼容性。)<br>Check compatibility before purchasing hardware. (购买硬件前请检查兼容性。) |
-| format | /ˈfɔːrmæt/ | 格式, 版式, 格局 | Please follow the specified format when submitting your report. (提交报告时请遵循指定格式。)<br>The document is available in digital format. (该文档有数字格式版本。) |
+| compatibility | /kəmˌpætəˈbɪləti/ | 兼容性, 相容性, 协调性 | The new software has excellent compatibility with older systems. (新软件与旧系统有极佳的兼容性。)<br>Check compatibility before purchasing hardware. (购买硬件前请检查兼容性。)<br>The couple's compatibility was evident in their shared interests. (这对情侣的协调性在他们共同的兴趣中显而易见。) |
+| format | /ˈfɔːrmæt/ | 格式, 版式, 格局 | Please follow the specified format when submitting your report. (提交报告时请遵循指定格式。)<br>The document is available in digital format. (该文档有数字格式版本。)<br>She changed the format of the presentation to make it more engaging. (她改变了演示文稿的版式使其更具吸引力。) |
 ```
 
 ### Alternative Detailed Format
@@ -66,9 +66,9 @@ Since this is a documentation-based project, there are no traditional build/lint
 ### Content Guidelines
 1. **Phonetics:** Always provide IPA transcription in brackets
 2. **Translations:** Provide multiple common Chinese translations separated by commas, focusing on most frequently used meanings
-3. **Examples:** Minimum 1 example sentence, maximum 2. Each English sentence must include Chinese translation in parentheses
+3. **Examples:** Maximum 4 example sentences. Each English sentence must include Chinese translation in parentheses. Examples should correspond to different translation meanings provided
 4. **Translation Quality:** Provide accurate, natural Chinese translations for both word meanings and example sentences
-5. **Example Selection:** Choose examples that demonstrate common usage contexts and key meanings
+5. **Example Selection:** Choose examples that demonstrate common usage contexts and key meanings, covering the various translations provided
 
 ### Entry Structure Rules
 1. Each word starts with `## WordName`
