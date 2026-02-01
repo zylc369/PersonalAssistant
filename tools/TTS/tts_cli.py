@@ -210,6 +210,50 @@ def generate_filename_from_text(text: str, max_length: int = 20) -> str:
     return f"{base_name}.wav"
 
 
+def process_output_path(output_path: str, text: str, max_filename_length: int = 20) -> str:
+    """Process output path - handle directory-only case and generate filename if needed.
+    
+    Args:
+        output_path: User-provided output path
+        text: Input text for filename generation
+        max_filename_length: Maximum filename length
+        
+    Returns:
+        Final output file path
+    """
+    from pathlib import Path
+    import os
+    
+    path_obj = Path(output_path)
+    
+    # Check if path looks like a directory (ends with slash or doesn't have extension)
+    if (output_path.endswith('/') or output_path.endswith('\\') or 
+        not any(output_path.lower().endswith(ext) for ext in ['.wav', '.mp3', '.ogg'])):
+        
+        # Directory case: ensure directory exists, then generate filename
+        if not path_obj.exists():
+            try:
+                path_obj.mkdir(parents=True, exist_ok=True)
+                print(f"[INFO] Created directory: {path_obj}")
+            except OSError as e:
+                print(f"[ERROR] Failed to create directory {path_obj}: {e}")
+                return output_path
+        
+        filename = generate_filename_from_text(text, max_filename_length)
+        return str(path_obj / filename)
+    else:
+        # File case: ensure parent directory exists
+        parent_dir = path_obj.parent
+        if parent_dir and not parent_dir.exists():
+            try:
+                parent_dir.mkdir(parents=True, exist_ok=True)
+                print(f"[INFO] Created parent directory: {parent_dir}")
+            except OSError as e:
+                print(f"[ERROR] Failed to create parent directory {parent_dir}: {e}")
+        
+        return output_path
+
+
 def setup_arg_parser() -> argparse.ArgumentParser:
     """Setup and return argument parser."""
     parser = argparse.ArgumentParser(
@@ -282,8 +326,11 @@ def process_args(args) -> None:
         logger.error("Text is required unless using --info flag")
         sys.exit(1)
     
-    # Generate filename if not provided
-    if not args.output:
+    # Process output path (handle directory case)
+    if args.output:
+        args.output = process_output_path(args.output, args.text, args.max_filename_length)
+    else:
+        # Generate filename if not provided
         args.output = generate_filename_from_text(args.text, args.max_filename_length)
     
     # Generate speech

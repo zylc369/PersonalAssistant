@@ -125,6 +125,8 @@ python tts_cli.py "This is a test" --max-filename-length 15
 
 **Features:**
 - **Auto-generated filenames** when output path is not specified
+- **Directory support**: When output is a directory, generates filename inside it
+- **Automatic directory creation**: Creates directories if they don't exist
 - **Word-based naming**: Takes first 5 words, joins with underscores
 - **Length control**: Default max 20 characters, customizable with `--max-filename-length`
 - **Clean naming**: Removes special characters, converts to lowercase
@@ -132,10 +134,18 @@ python tts_cli.py "This is a test" --max-filename-length 15
 
 **Examples:**
 ```bash
-./tts "Hello world"                    # → hello_world.wav
-./tts "How are you today"           # → how_are_you_today.wav
-./tts "Good morning everyone"         # → good_morning_everyone.wav
+./tts "Hello world"                           # → hello_world.wav
+./tts "How are you today"                      # → how_are_you_today.wav
+./tts "Good morning everyone"                    # → good_morning_everyone.wav
 ./tts "This is a very long sentence..." --max-filename-length 15  # → this_is_a_very.wav
+
+# Directory output with auto filename
+./tts "Compatibility" -o audio/               # → audio/compatibility.wav
+./tts "Test multiple words" -o audio/          # → audio/test_multiple_words.wav
+./tts "Hello" -o /path/to/audio/             # → /path/to/audio/hello.wav
+
+# Full file path still works
+./tts "Hello world" -o audio/custom.wav      # → audio/custom.wav
 ```
 
 Windows:
