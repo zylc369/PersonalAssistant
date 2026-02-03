@@ -1,0 +1,6 @@
+# Vocabulary Notebook4
+
+| Word | Phonetic | Translation | Example Sentences |
+| ---- | -------- | ----------- | ----------------- |
+| followed by | phrasal prep. /ˈfɒləʊd baɪ/ <audio controls><source src="audio/followed_by.mp3" type="audio/mpeg">🔊</audio> | 接着是, 随后是, 后面跟着 | The presentation will be followed by a Q&A session. (演讲结束后接着是问答环节。)<br>Lunch was followed by dessert and coffee. (午餐后随后的甜点和咖啡。)<br>The main course was followed by three different side dishes. (主菜后面跟着三种不同的配菜。) |
+| leader key | n. /ˈliːdər kiː/ <audio controls><source src="audio/leader_key.mp3" type="audio/mpeg">🔊</audio> | 前导键, 引导键, 领导键 | In Vim, the leader key is used to create custom shortcuts. (在Vim中，前导键用于创建自定义快捷键。)<br>Press the leader key followed by 'w' to save the file. (按下前导键然后按'w'来保存文件。)<br>The default leader key in many text editors is the backslash. (许多文本编辑器中的默认前导键是反斜杠。) |
